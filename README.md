@@ -1,98 +1,351 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# GraphQL & REST API - Music Playlist Manager
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API completa para gerenciamento de músicas, playlists e usuários, desenvolvida com NestJS, GraphQL e REST, utilizando Supabase como banco de dados PostgreSQL.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🎯 Sobre o Projeto
 
-## Description
+Esta API permite gerenciar:
+- **Músicas**: Cadastro de músicas com nome e artista
+- **Playlists**: Criação e gerenciamento de playlists
+- **Usuários**: Cadastro de usuários com nome e idade
+- **Relacionamentos**: Associação de músicas a playlists e playlists a usuários
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+A API oferece duas interfaces:
+- **GraphQL**: Para consultas flexíveis e eficientes
+- **REST**: Para integração tradicional com endpoints HTTP
 
-## Project setup
+## 🛠️ Tecnologias
 
-```bash
-$ npm install
+- **NestJS** - Framework Node.js
+- **GraphQL** - Query language e runtime
+- **Apollo Server** - Servidor GraphQL
+- **Supabase** - Banco de dados PostgreSQL
+- **TypeScript** - Linguagem de programação
+
+## 📊 Estrutura do Banco de Dados
+
+```
+music (id, name, artist)
+playlist (id, name)
+user (id, name, age)
+playlist_music (id, playlistId, musicId) - Relacionamento N:N
+user_playlist (id, userId, playlistId) - Relacionamento N:N
 ```
 
-## Compile and run the project
+## 🚀 Configuração
+
+### 1. Instalar dependências
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Run tests
+### 2. Configurar variáveis de ambiente
+
+Crie um arquivo `.env` na raiz do projeto:
+
+```env
+SUPABASE_URL=sua_url_do_supabase
+SUPABASE_ANON_KEY=sua_chave_anon_do_supabase
+PORT=3000
+```
+
+### 3. Executar o projeto
 
 ```bash
-# unit tests
-$ npm run test
+# Desenvolvimento
+npm run start:dev
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+# Produção
+npm run start:prod
 ```
 
-## Deployment
+A API estará disponível em:
+- **REST API**: `http://localhost:3000`
+- **GraphQL Playground**: `http://localhost:3000/graphql`
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## 📚 Exemplos de Uso
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### GraphQL
+
+#### Queries
+
+**Buscar todas as músicas:**
+```graphql
+query {
+  musics {
+    id
+    name
+    artist
+    playlists {
+      id
+      name
+    }
+  }
+}
+```
+
+**Buscar uma música por ID:**
+```graphql
+query {
+  music(id: 1) {
+    id
+    name
+    artist
+  }
+}
+```
+
+**Buscar todas as playlists com músicas e usuários:**
+```graphql
+query {
+  playlists {
+    id
+    name
+    musics {
+      id
+      name
+      artist
+    }
+    users {
+      id
+      name
+      age
+    }
+  }
+}
+```
+
+#### Mutations
+
+**Criar uma música:**
+```graphql
+mutation {
+  createMusic(input: {
+    name: "Bohemian Rhapsody"
+    artist: "Queen"
+  }) {
+    id
+    name
+    artist
+  }
+}
+```
+
+**Criar uma playlist:**
+```graphql
+mutation {
+  createPlaylist(input: {
+    name: "Minhas Favoritas"
+  }) {
+    id
+    name
+  }
+}
+```
+
+**Adicionar música a uma playlist:**
+```graphql
+mutation {
+  addMusicToPlaylist(input: {
+    playlistId: 1
+    musicId: 1
+  })
+}
+```
+
+**Criar um usuário:**
+```graphql
+mutation {
+  createUser(input: {
+    name: "João Silva"
+    age: 25
+  }) {
+    id
+    name
+    age
+  }
+}
+```
+
+**Adicionar playlist a um usuário:**
+```graphql
+mutation {
+  addPlaylistToUser(input: {
+    userId: 1
+    playlistId: 1
+  })
+}
+```
+
+### REST API
+
+#### Music Endpoints
+
+**Listar todas as músicas:**
+```bash
+GET http://localhost:3000/music
+```
+
+**Buscar uma música:**
+```bash
+GET http://localhost:3000/music/1
+```
+
+**Criar uma música:**
+```bash
+POST http://localhost:3000/music
+Content-Type: application/json
+
+{
+  "name": "Bohemian Rhapsody",
+  "artist": "Queen"
+}
+```
+
+**Atualizar uma música:**
+```bash
+PUT http://localhost:3000/music/1
+Content-Type: application/json
+
+{
+  "name": "Bohemian Rhapsody (Updated)",
+  "artist": "Queen"
+}
+```
+
+**Deletar uma música:**
+```bash
+DELETE http://localhost:3000/music/1
+```
+
+#### Playlist Endpoints
+
+**Listar todas as playlists:**
+```bash
+GET http://localhost:3000/playlist
+```
+
+**Buscar uma playlist:**
+```bash
+GET http://localhost:3000/playlist/1
+```
+
+**Buscar músicas de uma playlist:**
+```bash
+GET http://localhost:3000/playlist/1/musics
+```
+
+**Criar uma playlist:**
+```bash
+POST http://localhost:3000/playlist
+Content-Type: application/json
+
+{
+  "name": "Minhas Favoritas"
+}
+```
+
+**Adicionar música a uma playlist:**
+```bash
+POST http://localhost:3000/playlist/1/music
+Content-Type: application/json
+
+{
+  "musicId": 1
+}
+```
+
+**Remover música de uma playlist:**
+```bash
+DELETE http://localhost:3000/playlist/1/music/1
+```
+
+#### User Endpoints
+
+**Listar todos os usuários:**
+```bash
+GET http://localhost:3000/user
+```
+
+**Buscar um usuário:**
+```bash
+GET http://localhost:3000/user/1
+```
+
+**Buscar playlists de um usuário:**
+```bash
+GET http://localhost:3000/user/1/playlists
+```
+
+**Criar um usuário:**
+```bash
+POST http://localhost:3000/user
+Content-Type: application/json
+
+{
+  "name": "João Silva",
+  "age": 25
+}
+```
+
+**Adicionar playlist a um usuário:**
+```bash
+POST http://localhost:3000/user/1/playlist
+Content-Type: application/json
+
+{
+  "playlistId": 1
+}
+```
+
+## 📖 Documentação Completa
+
+Para mais exemplos detalhados, consulte:
+- [Exemplos GraphQL](./GRAPHQL_EXAMPLES.md)
+- [Exemplos REST](./REST_API_EXAMPLES.md)
+
+## 🧪 Testes
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Testes unitários
+npm run test
+
+# Testes e2e
+npm run test:e2e
+
+# Cobertura de testes
+npm run test:cov
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## 📝 Scripts Disponíveis
 
-## Resources
+```bash
+# Desenvolvimento
+npm run start:dev
 
-Check out a few resources that may come in handy when working with NestJS:
+# Produção
+npm run start:prod
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+# Build
+npm run build
 
-## Support
+# Lint
+npm run lint
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# Formatação
+npm run format
+```
 
-## Stay in touch
+## 🏗️ Estrutura do Projeto
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```
+src/
+├── controllers/      # Controllers REST
+├── entities/         # Entidades GraphQL
+├── inputs/           # Inputs para mutations
+├── resolvers/        # Resolvers GraphQL
+├── supabase/         # Serviço Supabase
+├── app.module.ts     # Módulo principal
+└── main.ts           # Entry point
+```
