@@ -9,6 +9,9 @@ import { SupabaseModule } from './supabase/supabase.module';
 import { MusicResolver } from './resolvers/music.resolver';
 import { PlaylistResolver } from './resolvers/playlist.resolver';
 import { UserResolver } from './resolvers/user.resolver';
+import { MusicController } from './controllers/music.controller';
+import { PlaylistController } from './controllers/playlist.controller';
+import { UserController } from './controllers/user.controller';
 
 @Module({
   imports: [
@@ -23,7 +26,12 @@ import { UserResolver } from './resolvers/user.resolver';
     }),
     SupabaseModule,
   ],
-  controllers: [AppController],
+  controllers: [
+    AppController,
+    MusicController,
+    PlaylistController,
+    UserController,
+  ],
   providers: [AppService, MusicResolver, PlaylistResolver, UserResolver],
 })
 export class AppModule {}
