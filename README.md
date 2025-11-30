@@ -1,6 +1,6 @@
-# GraphQL, REST & gRPC API - Music Playlist Manager
+# GraphQL, REST, gRPC & SOAP API - Music Playlist Manager
 
-API completa para gerenciamento de músicas, playlists e usuários, desenvolvida com NestJS, GraphQL, REST e gRPC, utilizando Supabase como banco de dados PostgreSQL.
+API completa para gerenciamento de músicas, playlists e usuários, desenvolvida com NestJS, GraphQL, REST, gRPC e SOAP, utilizando Supabase como banco de dados PostgreSQL.
 
 ## 🎯 Sobre o Projeto
 
@@ -10,10 +10,11 @@ Esta API permite gerenciar:
 - **Usuários**: Cadastro de usuários com nome e idade
 - **Relacionamentos**: Associação de músicas a playlists e playlists a usuários
 
-A API oferece três interfaces:
+A API oferece quatro interfaces:
 - **GraphQL**: Para consultas flexíveis e eficientes
 - **REST**: Para integração tradicional com endpoints HTTP
 - **gRPC**: Para comunicação de alta performance com Protocol Buffers
+- **SOAP**: Para integração com sistemas corporativos usando WSDL
 
 ## 🛠️ Tecnologias
 
@@ -22,6 +23,7 @@ A API oferece três interfaces:
 - **Apollo Server** - Servidor GraphQL
 - **gRPC** - Framework RPC de alta performance
 - **Protocol Buffers** - Serialização de dados
+- **SOAP** - Protocolo de comunicação baseado em XML/WSDL
 - **Supabase** - Banco de dados PostgreSQL
 - **TypeScript** - Linguagem de programação
 
@@ -67,6 +69,8 @@ A API estará disponível em:
 - **REST API**: `http://localhost:3000`
 - **GraphQL Playground**: `http://localhost:3000/graphql`
 - **gRPC Server**: `localhost:5000`
+- **SOAP Server**: `http://localhost:8000/soap`
+- **SOAP WSDL**: `http://localhost:8000/soap?wsdl`
 
 ## 📚 Exemplos de Uso
 
@@ -301,12 +305,23 @@ Content-Type: application/json
 {
   "playlistId": 1
 }
-```
-
 ## 📖 Documentação Completa
 
 Para mais exemplos detalhados, consulte:
 - [Exemplos GraphQL](./GRAPHQL_EXAMPLES.md)
+- [Exemplos REST](./REST_API_EXAMPLES.md)
+- [Exemplos gRPC](./GRPC_EXAMPLES.md)
+- [Exemplos SOAP](./SOAP_API_EXAMPLES.md)
+
+## 🧪 Testando a API SOAP
+
+Execute o script de teste automatizado:
+
+```powershell
+.\test-soap.ps1
+```
+
+Este script testará todas as operações SOAP disponíveis automaticamente.ES.md)
 - [Exemplos REST](./REST_API_EXAMPLES.md)
 - [Exemplos gRPC](./GRPC_EXAMPLES.md)
 
@@ -329,23 +344,39 @@ npm run test:cov
 # Desenvolvimento
 npm run start:dev
 
-# Produção
-npm run start:prod
-
-# Build
-npm run build
-
-# Lint
-npm run lint
-
-# Formatação
-npm run format
-```
-
 ## 🏗️ Estrutura do Projeto
 
 ```
 src/
+├── controllers/      # Controllers REST
+├── entities/         # Entidades GraphQL
+├── grpc/             # Controllers gRPC
+├── soap/             # Serviços SOAP
+├── inputs/           # Inputs para mutations
+├── resolvers/        # Resolvers GraphQL
+├── supabase/         # Serviço Supabase
+├── app.module.ts     # Módulo principal
+└── main.ts           # Entry point
+proto/
+├── user.proto        # Definições gRPC do User
+├── music.proto       # Definições gRPC do Music
+└── playlist.proto    # Definições gRPC do Playlist
+service.wsdl          # Definições WSDL para SOAP
+test-soap.ps1         # Script de teste SOAP
+```
+
+## 🔄 Comparação entre as Tecnologias
+
+| Característica | REST | GraphQL | gRPC | SOAP |
+|----------------|------|---------|------|------|
+| **Porta** | 3000 | 3000 | 5000 | 8000 |
+| **Formato** | JSON | JSON | Protobuf | XML |
+| **Protocolo** | HTTP/1.1 | HTTP/1.1 | HTTP/2 | HTTP/1.1 |
+| **Tipagem** | Não | Sim (Schema) | Sim (Proto) | Sim (WSDL) |
+| **Performance** | Média | Alta | Muito Alta | Baixa |
+| **Flexibilidade** | Baixa | Muito Alta | Média | Baixa |
+| **Documentação** | Manual | Auto-gerada | Auto-gerada | Auto-gerada (WSDL) |
+| **Caso de Uso** | APIs públicas | Apps modernos | Microsserviços | Sistemas legados |/
 ├── controllers/      # Controllers REST
 ├── entities/         # Entidades GraphQL
 ├── grpc/             # Controllers gRPC
