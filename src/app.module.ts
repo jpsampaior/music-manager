@@ -15,6 +15,9 @@ import { UserController } from './controllers/user.controller';
 import { UserGrpcController } from './grpc/user.grpc.controller';
 import { MusicGrpcController } from './grpc/music.grpc.controller';
 import { PlaylistGrpcController } from './grpc/playlist.grpc.controller';
+import { MusicSoapService } from './soap/music.soap.service';
+import { UserSoapService } from './soap/user.soap.service';
+import { PlaylistSoapService } from './soap/playlist.soap.service';
 
 @Module({
   imports: [
@@ -38,6 +41,14 @@ import { PlaylistGrpcController } from './grpc/playlist.grpc.controller';
     MusicGrpcController,
     PlaylistGrpcController,
   ],
-  providers: [AppService, MusicResolver, PlaylistResolver, UserResolver],
+  providers: [
+    AppService,
+    MusicResolver,
+    PlaylistResolver,
+    UserResolver,
+    MusicSoapService,
+    UserSoapService,
+    PlaylistSoapService,
+  ],
 })
 export class AppModule {}
