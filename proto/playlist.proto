@@ -7,6 +7,7 @@ service PlaylistService {
   rpc FindOne (PlaylistById) returns (Playlist) {}
   rpc FindMusics (PlaylistById) returns (MusicList) {}
   rpc FindUsers (PlaylistById) returns (UserList) {}
+  rpc FindByMusic (MusicById) returns (PlaylistList) {}
   rpc Create (CreatePlaylistRequest) returns (Playlist) {}
   rpc Update (UpdatePlaylistRequest) returns (Playlist) {}
   rpc Delete (PlaylistById) returns (DeleteResponse) {}
@@ -27,6 +28,10 @@ message PlaylistList {
 
 message PlaylistById {
   int32 id = 1;
+}
+
+message MusicById {
+  int32 musicId = 1;
 }
 
 message CreatePlaylistRequest {

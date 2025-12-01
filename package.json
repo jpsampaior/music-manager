@@ -17,9 +17,14 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "client:examples": "ts-node src/client/client-examples.ts",
+    "client:load-test": "ts-node src/client/load-test.ts",
+    "client:stress": "ts-node src/client/load-test.ts --stress",
+    "client:all": "npm run client:examples && npm run client:load-test"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.0",
     "@apollo/server": "^5.1.0",
     "@as-integrations/express5": "^1.1.2",
     "@grpc/grpc-js": "^1.14.1",
@@ -33,6 +38,8 @@
     "@nestjs/platform-express": "^11.0.1",
     "@supabase/supabase-js": "^2.81.1",
     "@types/soap": "^0.18.0",
+    "axios": "^1.6.0",
+    "cross-fetch": "^4.0.0",
     "graphql": "^16.12.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",

@@ -57,6 +57,10 @@ interface RemoveMusicFromPlaylistRequest {
   musicId: number;
 }
 
+interface MusicById {
+  musicId: number;
+}
+
 @Controller()
 export class PlaylistGrpcController {
   constructor(private readonly supabaseService: SupabaseService) {}
@@ -117,6 +121,26 @@ export class PlaylistGrpcController {
 
     if (error) throw new Error(error.message);
     return { users: users || [] };
+  }
+
+  @GrpcMethod('PlaylistService', 'FindByMusic')
+  async findByMusic(data: MusicById): Promise<{ playlists: Playlist[] }> {
+    const { data: playlistMusicData, error: playlistMusicError } =
+      await this.supabaseService.playlistMusic
+        .select('playlistId')
+        .eq('musicId', data.musicId);
+
+    if (playlistMusicError || !playlistMusicData?.length) {
+      return { playlists: [] };
+    }
+
+    const playlistIds = playlistMusicData.map((pm) => pm.playlistId);
+    const { data: playlists, error } = await this.supabaseService.playlist
+      .select('*')
+      .in('id', playlistIds);
+
+    if (error) throw new Error(error.message);
+    return { playlists: playlists || [] };
   }
 
   @GrpcMethod('PlaylistService', 'Create')
