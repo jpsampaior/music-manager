@@ -1,0 +1,41 @@
+# Binários
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+music-manager-server
+
+# Test binários
+*.test
+
+# Saída de cobertura
+*.out
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Go workspace
+go.work
+go.work.sum
+
+# Variáveis de ambiente
+.env
+
+# Arquivos gerados pelo protoc
+proto/**/*.pb.go
+proto/**/*_grpc.pb.go
+
+# Dependências
+vendor/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
