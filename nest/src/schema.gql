@@ -1,0 +1,91 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input AddMusicToPlaylistInput {
+  musicId: Int!
+  playlistId: Int!
+}
+
+input AddPlaylistToUserInput {
+  playlistId: Int!
+  userId: Int!
+}
+
+input CreateMusicInput {
+  artist: String!
+  name: String!
+}
+
+input CreatePlaylistInput {
+  name: String!
+}
+
+input CreateUserInput {
+  age: Int!
+  name: String!
+}
+
+type Music {
+  artist: String!
+  id: Int!
+  name: String!
+  playlists: [Playlist!]
+}
+
+type Mutation {
+  addMusicToPlaylist(input: AddMusicToPlaylistInput!): Boolean!
+  addPlaylistToUser(input: AddPlaylistToUserInput!): Boolean!
+  createMusic(input: CreateMusicInput!): Music!
+  createPlaylist(input: CreatePlaylistInput!): Playlist!
+  createUser(input: CreateUserInput!): User!
+  removeMusic(id: Int!): Boolean!
+  removeMusicFromPlaylist(musicId: Int!, playlistId: Int!): Boolean!
+  removePlaylist(id: Int!): Boolean!
+  removePlaylistFromUser(playlistId: Int!, userId: Int!): Boolean!
+  removeUser(id: Int!): Boolean!
+  updateMusic(input: UpdateMusicInput!): Music!
+  updatePlaylist(input: UpdatePlaylistInput!): Playlist!
+  updateUser(input: UpdateUserInput!): User!
+}
+
+type Playlist {
+  id: Int!
+  musics: [Music!]
+  name: String!
+  users: [User!]
+}
+
+type Query {
+  music(id: Int!): Music
+  musics: [Music!]!
+  playlist(id: Int!): Playlist
+  playlists: [Playlist!]!
+  playlistsByMusic(musicId: Int!): [Playlist!]!
+  user(id: Int!): User
+  users: [User!]!
+}
+
+input UpdateMusicInput {
+  artist: String
+  id: Int!
+  name: String
+}
+
+input UpdatePlaylistInput {
+  id: Int!
+  name: String
+}
+
+input UpdateUserInput {
+  age: Int
+  id: Int!
+  name: String
+}
+
+type User {
+  age: Int!
+  id: Int!
+  name: String!
+  playlists: [Playlist!]
+}
