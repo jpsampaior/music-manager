@@ -1,0 +1,6 @@
+# Ignore virtualenv folder at project root
+/.venv/
+# Common alternative names
+venv/
+env/
+__pycache__/

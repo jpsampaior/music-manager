@@ -29,10 +29,12 @@ class ClientConfig:
     rest_timeout: int = 5000
     graphql_url: str = "http://localhost:3000/graphql"
     graphql_timeout: int = 5000
-    soap_url: str = "http://localhost:8000/soap"
-    soap_wsdl_url: str = "http://localhost:3000/service.wsdl"
+    soap_url: str = "http://localhost:8080/soap"
+    soap_user_wsdl_url: str = "http://localhost:8080/user/wsdl"
+    soap_music_wsdl_url: str = "http://localhost:8080/music/wsdl"
+    soap_playlist_wsdl_url: str = "http://localhost:8080/playlist/wsdl"
     soap_timeout: int = 5000
-    grpc_url: str = "localhost:5000"
+    grpc_url: str = "localhost:4000"
     grpc_timeout: int = 5000
 
 
@@ -65,7 +67,9 @@ class MusicStreamingClient:
     def __init__(self, config: Optional[ClientConfig] = None):
         """Inicializar cliente com configuração opcional"""
         self.config = config or ClientConfig()
-        self.soap_client = None
+        self.soap_user_client = None
+        self.soap_music_client = None
+        self.soap_playlist_client = None
         self.grpc_clients = {}
         self.rest_session = requests.Session()
         self.rest_session.timeout = self.config.rest_timeout / 1000
@@ -278,16 +282,34 @@ class MusicStreamingClient:
 
     # ==================== SOAP ====================
 
-    async def _initialize_soap_client(self) -> None:
-        """Inicializar cliente SOAP"""
-        if self.soap_client:
+    async def _initialize_soap_user_client(self) -> None:
+        """Inicializar cliente SOAP de usuários"""
+        if self.soap_user_client:
             return
-
         try:
-            # Tentar com zeep
-            self.soap_client = SoapClient(wsdl=self.config.soap_wsdl_url)
+            self.soap_user_client = SoapClient(wsdl=self.config.soap_user_wsdl_url)
         except Exception as error:
-            print(f"Erro ao inicializar cliente SOAP: {error}")
+            print(f"Erro ao inicializar cliente SOAP de usuários: {error}")
+            raise
+
+    async def _initialize_soap_music_client(self) -> None:
+        """Inicializar cliente SOAP de músicas"""
+        if self.soap_music_client:
+            return
+        try:
+            self.soap_music_client = SoapClient(wsdl=self.config.soap_music_wsdl_url)
+        except Exception as error:
+            print(f"Erro ao inicializar cliente SOAP de músicas: {error}")
+            raise
+
+    async def _initialize_soap_playlist_client(self) -> None:
+        """Inicializar cliente SOAP de playlists"""
+        if self.soap_playlist_client:
+            return
+        try:
+            self.soap_playlist_client = SoapClient(wsdl=self.config.soap_playlist_wsdl_url)
+        except Exception as error:
+            print(f"Erro ao inicializar cliente SOAP de playlists: {error}")
             raise
 
     def _parse_soap_response(self, response: Any) -> List[Dict]:
@@ -307,10 +329,10 @@ class MusicStreamingClient:
     async def soap_list_all_users(self) -> List[User]:
         """SOAP: Listar todos os usuários"""
         try:
-            if not self.soap_client:
-                await self._initialize_soap_client()
+            if not self.soap_user_client:
+                await self._initialize_soap_user_client()
             
-            result = self.soap_client.service.FindAllUsers()
+            result = self.soap_user_client.service.FindAll()
             users_data = self._parse_soap_response(result)
             
             users = []
@@ -333,10 +355,10 @@ class MusicStreamingClient:
     async def soap_list_all_musics(self) -> List[Music]:
         """SOAP: Listar todas as músicas"""
         try:
-            if not self.soap_client:
-                await self._initialize_soap_client()
+            if not self.soap_music_client:
+                await self._initialize_soap_music_client()
             
-            result = self.soap_client.service.FindAllMusics()
+            result = self.soap_music_client.service.FindAll()
             musics_data = self._parse_soap_response(result)
             
             musics = []
@@ -356,13 +378,13 @@ class MusicStreamingClient:
             print(f"Erro ao listar músicas (SOAP): {error}")
             raise
 
-    async def soap_list_user_playlists(self, user_id: int) -> List[Playlist]:
+    async def soap_list_playlists_by_user(self, user_id: int) -> List[Playlist]:
         """SOAP: Listar playlists de um usuário"""
         try:
-            if not self.soap_client:
-                await self._initialize_soap_client()
+            if not self.soap_user_client:
+                await self._initialize_soap_user_client()
             
-            result = self.soap_client.service.FindUserPlaylists(userId=user_id)
+            result = self.soap_user_client.service.FindPlaylists(user_id)
             playlists_data = self._parse_soap_response(result)
             
             playlists = []
@@ -381,13 +403,13 @@ class MusicStreamingClient:
             print(f"Erro ao listar playlists do usuário {user_id} (SOAP): {error}")
             raise
 
-    async def soap_list_playlist_musics(self, playlist_id: int) -> List[Music]:
+    async def soap_list_musics_by_playlist(self, playlist_id: int) -> List[Music]:
         """SOAP: Listar músicas de uma playlist"""
         try:
-            if not self.soap_client:
-                await self._initialize_soap_client()
+            if not self.soap_playlist_client:
+                await self._initialize_soap_playlist_client()
             
-            result = self.soap_client.service.FindPlaylistMusics(playlistId=playlist_id)
+            result = self.soap_playlist_client.service.FindMusics(playlist_id)
             musics_data = self._parse_soap_response(result)
             
             musics = []
@@ -410,10 +432,10 @@ class MusicStreamingClient:
     async def soap_list_playlists_by_music(self, music_id: int) -> List[Playlist]:
         """SOAP: Listar playlists que contêm uma música"""
         try:
-            if not self.soap_client:
-                await self._initialize_soap_client()
+            if not self.soap_music_client:
+                await self._initialize_soap_music_client()
             
-            result = self.soap_client.service.FindPlaylistsByMusic(musicId=music_id)
+            result = self.soap_music_client.service.FindPlaylists(musicId=music_id)
             playlists_data = self._parse_soap_response(result)
             
             playlists = []
@@ -477,7 +499,7 @@ class MusicStreamingClient:
             import user_pb2
             
             stub = self.grpc_clients['user']
-            response = await stub.FindAllUsers(Empty())
+            response = await stub.FindAll(Empty())
             
             users = []
             for user in response.users:
@@ -503,7 +525,7 @@ class MusicStreamingClient:
             import music_pb2
             
             stub = self.grpc_clients['music']
-            response = await stub.FindAllMusics(Empty())
+            response = await stub.FindAll(Empty())
             
             musics = []
             for music in response.musics:
@@ -528,7 +550,7 @@ class MusicStreamingClient:
             
             stub = self.grpc_clients['user']
             request = user_pb2.UserById(id=user_id)
-            response = await stub.FindUserPlaylists(request)
+            response = await stub.FindPlaylists(request)
             
             playlists = []
             for playlist in response.playlists:
@@ -552,7 +574,7 @@ class MusicStreamingClient:
             
             stub = self.grpc_clients['playlist']
             request = playlist_pb2.PlaylistById(id=playlist_id)
-            response = await stub.FindPlaylistMusics(request)
+            response = await stub.FindMusics(request)
             
             musics = []
             for music in response.musics:
@@ -570,23 +592,10 @@ class MusicStreamingClient:
     async def grpc_list_playlists_by_music(self, music_id: int) -> List[Playlist]:
         """gRPC: Listar playlists que contêm uma música"""
         try:
-            if not self.grpc_clients.get('music'):
-                await self._initialize_grpc_clients()
-            
-            import music_pb2
-            
-            stub = self.grpc_clients['music']
-            request = music_pb2.MusicById(id=music_id)
-            response = await stub.FindPlaylistsByMusic(request)
-            
-            playlists = []
-            for playlist in response.playlists:
-                playlists.append(Playlist(
-                    id=playlist.id,
-                    name=playlist.name
-                ))
-            
-            return playlists
+            # Método não implementado no serviço gRPC de música
+            # Retornar lista vazia por enquanto
+            print(f"Método grpc_list_playlists_by_music não implementado no servidor gRPC")
+            return []
         except Exception as error:
             print(f"Erro ao listar playlists com música {music_id} (gRPC): {error}")
             return []

@@ -8,7 +8,7 @@ from typing import List, Dict, Callable, Any
 from dataclasses import dataclass
 from statistics import mean, median, stdev
 import sys
-from music_streaming_client import MusicStreamingClient, ClientConfig
+from music_streaming_client import MusicStreamingClient
 
 
 @dataclass

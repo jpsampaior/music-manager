@@ -1,0 +1,372 @@
+# Teste das requisições SOAP
+# Use este arquivo com ferramentas como REST Client do VS Code ou Postman
+
+### Variáveis
+@baseUrl = http://localhost:8080
+
+### ========================================
+### MUSIC SERVICE
+### ========================================
+
+### FindAll - Listar todas as músicas
+POST {{baseUrl}}/music
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "FindAll"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <FindAllMusicRequest xmlns="http://music.soap.manager/music"/>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### FindOne - Buscar música por ID
+POST {{baseUrl}}/music
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "FindOne"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <FindOneMusicRequest xmlns="http://music.soap.manager/music">
+      <id>1</id>
+    </FindOneMusicRequest>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### Create - Criar nova música
+POST {{baseUrl}}/music
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "Create"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <CreateMusicRequest xmlns="http://music.soap.manager/music">
+      <name>Bohemian Rhapsody</name>
+      <artist>Queen</artist>
+    </CreateMusicRequest>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### Update - Atualizar música
+POST {{baseUrl}}/music
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "Update"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <UpdateMusicRequest xmlns="http://music.soap.manager/music">
+      <id>1</id>
+      <name>Updated Song Name</name>
+      <artist>Updated Artist</artist>
+    </UpdateMusicRequest>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### Delete - Deletar música
+POST {{baseUrl}}/music
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "Delete"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <DeleteMusicRequest xmlns="http://music.soap.manager/music">
+      <id>1</id>
+    </DeleteMusicRequest>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### ========================================
+### PLAYLIST SERVICE
+### ========================================
+
+### FindAll - Listar todas as playlists
+POST {{baseUrl}}/playlist
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "FindAll"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <FindAllPlaylistsRequest xmlns="http://music.soap.manager/playlist"/>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### FindOne - Buscar playlist por ID
+POST {{baseUrl}}/playlist
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "FindOne"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <FindOnePlaylistRequest xmlns="http://music.soap.manager/playlist">
+      <id>1</id>
+    </FindOnePlaylistRequest>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### FindMusics - Buscar músicas de uma playlist
+POST {{baseUrl}}/playlist
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "FindMusics"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <FindMusicsInPlaylistRequest xmlns="http://music.soap.manager/playlist">
+      <id>1</id>
+    </FindMusicsInPlaylistRequest>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### FindUsers - Buscar usuários de uma playlist
+POST {{baseUrl}}/playlist
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "FindUsers"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <FindUsersOfPlaylistRequest xmlns="http://music.soap.manager/playlist">
+      <id>1</id>
+    </FindUsersOfPlaylistRequest>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### Create - Criar nova playlist
+POST {{baseUrl}}/playlist
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "Create"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <CreatePlaylistRequest xmlns="http://music.soap.manager/playlist">
+      <name>My Favorite Songs</name>
+    </CreatePlaylistRequest>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### Update - Atualizar playlist
+POST {{baseUrl}}/playlist
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "Update"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <UpdatePlaylistRequest xmlns="http://music.soap.manager/playlist">
+      <id>1</id>
+      <name>Updated Playlist Name</name>
+    </UpdatePlaylistRequest>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### Delete - Deletar playlist
+POST {{baseUrl}}/playlist
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "Delete"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <DeletePlaylistRequest xmlns="http://music.soap.manager/playlist">
+      <id>1</id>
+    </DeletePlaylistRequest>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### AddMusic - Adicionar música à playlist
+POST {{baseUrl}}/playlist
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "AddMusic"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <AddMusicToPlaylistRequest xmlns="http://music.soap.manager/playlist">
+      <playlistId>1</playlistId>
+      <musicId>2</musicId>
+    </AddMusicToPlaylistRequest>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### RemoveMusic - Remover música da playlist
+POST {{baseUrl}}/playlist
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "RemoveMusic"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <RemoveMusicFromPlaylistRequest xmlns="http://music.soap.manager/playlist">
+      <playlistId>1</playlistId>
+      <musicId>2</musicId>
+    </RemoveMusicFromPlaylistRequest>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### ========================================
+### USER SERVICE
+### ========================================
+
+### FindAll - Listar todos os usuários
+POST {{baseUrl}}/user
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "FindAll"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <FindAllUsersRequest xmlns="http://music.soap.manager/user"/>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### FindOne - Buscar usuário por ID
+POST {{baseUrl}}/user
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "FindOne"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <FindOneUserRequest xmlns="http://music.soap.manager/user">
+      <id>1</id>
+    </FindOneUserRequest>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### FindPlaylists - Buscar playlists de um usuário
+POST {{baseUrl}}/user
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "FindPlaylists"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <FindPlaylistsOfUserRequest xmlns="http://music.soap.manager/user">
+      <id>1</id>
+    </FindPlaylistsOfUserRequest>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### Create - Criar novo usuário
+POST {{baseUrl}}/user
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "Create"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <CreateUserRequest xmlns="http://music.soap.manager/user">
+      <name>John Doe</name>
+      <age>30</age>
+    </CreateUserRequest>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### Update - Atualizar usuário
+POST {{baseUrl}}/user
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "Update"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <UpdateUserRequest xmlns="http://music.soap.manager/user">
+      <id>1</id>
+      <name>Jane Doe</name>
+      <age>25</age>
+    </UpdateUserRequest>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### Delete - Deletar usuário
+POST {{baseUrl}}/user
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "Delete"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <DeleteUserRequest xmlns="http://music.soap.manager/user">
+      <id>1</id>
+    </DeleteUserRequest>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### AddPlaylist - Adicionar playlist ao usuário
+POST {{baseUrl}}/user
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "AddPlaylist"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <AddPlaylistToUserRequest xmlns="http://music.soap.manager/user">
+      <userId>1</userId>
+      <playlistId>2</playlistId>
+    </AddPlaylistToUserRequest>
+  </soap:Body>
+</soap:Envelope>
+
+###
+
+### RemovePlaylist - Remover playlist do usuário
+POST {{baseUrl}}/user
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "RemovePlaylist"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <RemovePlaylistFromUserRequest xmlns="http://music.soap.manager/user">
+      <userId>1</userId>
+      <playlistId>2</playlistId>
+    </RemovePlaylistFromUserRequest>
+  </soap:Body>
+</soap:Envelope>
