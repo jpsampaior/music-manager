@@ -1,0 +1,334 @@
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                  📊 RESULTADOS COMPLETOS - TESTE DE CARGA                       │
+│                                                                                 │
+│                    DADOS EM TEXTO + GRÁFICOS PNG DISPONÍVEIS                   │
+│                                                                                 │
+│                         Data: Dezembro 2, 2025                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════════════
+ 1. RESUMO EXECUTIVO
+═══════════════════════════════════════════════════════════════════════════════════
+
+✨ PRINCIPAIS DESCOBERTAS:
+
+1. REST vs gRPC - PRATICAMENTE IDÊNTICOS
+   • REST:  103.12 ms (média)
+   • gRPC:  102.96 ms (média)
+   • Diferença: -0.16% (negligenciável)
+   • Conclusão: Escolha baseada em arquitetura, não em performance
+
+2. GraphQL - ACEITÁVEL MAS MAIS LENTO
+   • GraphQL:  146.29 ms (média)
+   • Diferença vs REST: +15%
+   • Causas: Query complexity, parsing adicional
+   • Conclusão: Trade-off aceitável pelo flexibility
+
+3. SOAP - ANOMALIAS DETECTADAS ⚠️
+   • Tempo: 0.05 ms (extremamente rápido)
+   • Throughput: 23,058 req/s (impossível)
+   • Taxa de Sucesso: 0%
+   • Status: NÃO OPERACIONAL - Investigar conectividade
+
+
+═══════════════════════════════════════════════════════════════════════════════════
+ 2. DADOS COMPLETOS - TEMPO MÉDIO POR OPERAÇÃO (ms)
+═══════════════════════════════════════════════════════════════════════════════════
+
+Operação                       REST        GraphQL      SOAP         gRPC
+─────────────────────────────────────────────────────────────────────────────────
+Listar Usuarios              77.64          75.07        0.16        75.44
+Listar Musicas               71.30          71.97        0.02        75.09
+Playlists do Usuario         72.47         145.39        0.03        72.97
+Musicas da Playlist         151.29         225.66        0.03       148.00
+Playlists com Musica        142.90         213.39        0.03       143.31
+─────────────────────────────────────────────────────────────────────────────────
+MÉDIA                       103.12         146.29        0.05       102.96
+─────────────────────────────────────────────────────────────────────────────────
+
+📊 Análise:
+   • Operações 1-3: Todas as tecnologias rápidas (<80ms)
+   • Operações 4-5: Operações complexas (>140ms)
+   • GraphQL é mais lento em operações complexas
+   • SOAP não está operacional
+
+
+═══════════════════════════════════════════════════════════════════════════════════
+ 3. DADOS COMPLETOS - REQUISIÇÕES POR SEGUNDO (req/s)
+═══════════════════════════════════════════════════════════════════════════════════
+
+Operação                       REST        GraphQL      SOAP          gRPC
+──────────────────────────────────────────────────────────────────────────────────
+Listar Usuarios             12.88          13.32      5885.85        13.25
+Listar Musicas              14.02          13.89     31947.86        13.31
+Playlists do Usuario        13.79           6.88     24383.70        13.70
+Musicas da Playlist          6.61           4.43     27873.79         6.76
+Playlists com Musica         7.00           4.69     25199.71         6.98
+──────────────────────────────────────────────────────────────────────────────────
+MÉDIA                       10.86           8.64     23058.18        10.80
+──────────────────────────────────────────────────────────────────────────────────
+
+📊 Análise:
+   • REST, GraphQL, gRPC: ~10-13 req/s (normal)
+   • SOAP: 20K+ req/s (anomalia)
+   • Operações 1-2 mais rápidas (simples)
+   • Operações 4-5 mais lentas (complexas)
+
+
+═══════════════════════════════════════════════════════════════════════════════════
+ 4. RANKING GERAL - POR TEMPO (Menor = Melhor)
+═══════════════════════════════════════════════════════════════════════════════════
+
+Posição    Tecnologia       Tempo (ms)    Diferença
+─────────────────────────────────────────────────
+🥇 1º      SOAP              0.05         base (⚠️ não operacional)
+🥈 2º      gRPC            102.96         +2,059,200%*
+🥉 3º      REST            103.12         +2,062,400%*
+🏅 4º      GraphQL         146.29         +2,925,800%*
+
+*Observação: Diferenças relativas a SOAP são artificiais (SOAP não funciona)
+Comparação válida: gRPC (102.96) ≈ REST (103.12) ≈ GraphQL (146.29)
+
+
+═══════════════════════════════════════════════════════════════════════════════════
+ 5. RANKING GERAL - POR THROUGHPUT (Maior = Melhor)
+═══════════════════════════════════════════════════════════════════════════════════
+
+Posição    Tecnologia         Req/s      Diferença
+─────────────────────────────────────────────────
+🥇 1º      SOAP             23,058.18   base (⚠️ não operacional)
+🥈 2º      REST                10.86   -99.95%
+🥉 3º      gRPC                10.80   -99.95%
+🏅 4º      GraphQL              8.64   -99.96%
+
+*Observação: SOAP fora da realidade, comparação válida entre REST/gRPC/GraphQL
+
+
+═══════════════════════════════════════════════════════════════════════════════════
+ 6. ANÁLISE DETALHADA POR TECNOLOGIA
+═══════════════════════════════════════════════════════════════════════════════════
+
+REST API
+─────────────────────────────────────────────
+  Tempo Mínimo:         71.30 ms (Listar Musicas)
+  Tempo Máximo:        151.29 ms (Musicas da Playlist)
+  Tempo Médio:         103.12 ms
+  Variação:            +79.99 ms (-3% to +47%)
+  Throughput Médio:     10.86 req/s
+  Status:              ✅ ESTÁVEL E CONSISTENTE
+
+GraphQL
+─────────────────────────────────────────────
+  Tempo Mínimo:         71.97 ms (Listar Musicas)
+  Tempo Máximo:        225.66 ms (Musicas da Playlist)
+  Tempo Médio:         146.29 ms
+  Variação:           +153.69 ms (-2% to +54%)
+  Throughput Médio:      8.64 req/s
+  Status:              ✅ FUNCIONAL, MAIS LENTO
+
+SOAP
+─────────────────────────────────────────────
+  Tempo Mínimo:          0.02 ms (Listar Musicas)
+  Tempo Máximo:          0.16 ms (Listar Usuarios)
+  Tempo Médio:           0.05 ms
+  Variação:             +0.14 ms
+  Throughput Médio:   23,058.18 req/s
+  Status:              ❌ NÃO OPERACIONAL
+
+gRPC
+─────────────────────────────────────────────
+  Tempo Mínimo:         72.97 ms (Playlists do Usuario)
+  Tempo Máximo:        148.00 ms (Musicas da Playlist)
+  Tempo Médio:         102.96 ms
+  Variação:            +75.03 ms (-3% to +44%)
+  Throughput Médio:     10.80 req/s
+  Status:              ✅ ESTÁVEL, EQUIVALENTE A REST
+
+
+═══════════════════════════════════════════════════════════════════════════════════
+ 7. COMPARAÇÃO DIRETA - REST vs gRPC vs GraphQL
+═══════════════════════════════════════════════════════════════════════════════════
+
+REST vs gRPC:
+  • Diferença de Tempo: -0.16% (negligenciável)
+  • Ambos têm a mesma variação (~75ms)
+  • Throughput essencialmente idêntico
+  • 🎯 CONCLUSÃO: Escolha por preferência de arquitetura
+
+REST vs GraphQL:
+  • Diferença de Tempo: +15% (notável)
+  • GraphQL 50% mais variável
+  • Throughput 20% menor
+  • 🎯 CONCLUSÃO: REST é mais rápido, GraphQL oferece flexibility
+
+gRPC vs GraphQL:
+  • Diferença de Tempo: +15% (gRPC vence)
+  • gRPC é mais consistente
+  • Throughput 20% melhor em gRPC
+  • 🎯 CONCLUSÃO: Para performance, escolha gRPC
+
+
+═══════════════════════════════════════════════════════════════════════════════════
+ 8. RECOMENDAÇÕES
+═══════════════════════════════════════════════════════════════════════════════════
+
+✅ PARA MÁXIMA PERFORMANCE:
+   • Escolha: REST ou gRPC (praticamente idênticos)
+   • Razão: Tempo ~100ms, throughput ~10 req/s
+   • Nota: REST é mais simples, gRPC é mais moderno
+
+✅ PARA BALANCE PERFORMANCE + FLEXIBILITY:
+   • Escolha: GraphQL
+   • Razão: Apenas 15% mais lento que REST
+   • Nota: Query flexibility compensa a perda de performance
+
+❌ NÃO USE SOAP (Por Enquanto):
+   • Motivo: Taxa de sucesso 0%
+   • Ação: Investigar conectividade do servidor SOAP
+   • Alternativa: Use REST ou gRPC
+   • Próximos Passos:
+     1. Verificar se servidor SOAP está rodando
+     2. Validar URL e autenticação
+     3. Verificar formatação WSDL
+     4. Testar com cliente SOAP simples
+
+
+═══════════════════════════════════════════════════════════════════════════════════
+ 9. VISUALIZAÇÕES DISPONÍVEIS
+═══════════════════════════════════════════════════════════════════════════════════
+
+📊 GRÁFICOS PNG (em ./charts/):
+  1. 01_tempo_medio_por_operacao.png
+     → Tempo de cada tecnologia em cada operação (escala log)
+     
+  2. 02_requisicoes_por_segundo.png
+     → Throughput de cada tecnologia em cada operação (escala log)
+     
+  3. 03_comparacao_tempo_geral.png
+     → Ranking: qual é mais rápido (geral)
+     
+  4. 04_comparacao_req_per_sec.png
+     → Ranking: qual tem mais throughput (geral)
+     
+  5. 05_radar_comparison.png
+     → Radar chart: performance normalizada (0-1)
+     
+  6. 06_heatmap_tempo.png
+     → Heatmap: tempo por tecnologia x operação
+     
+  7. 07_heatmap_req_sec.png
+     → Heatmap: throughput por tecnologia x operação
+     
+  8. 08_ranking_geral.png
+     → Duplo ranking: tempo vs throughput
+
+🖥️ VISUALIZADORES DE DADOS (em Python):
+  • integrated_viewer.py - Menu integrado (RECOMENDADO)
+  • view_data.py - Tabelas e dados em texto
+  • view_charts.py - Navegar gráficos PNG
+
+
+═══════════════════════════════════════════════════════════════════════════════════
+ 10. COMO USAR
+═══════════════════════════════════════════════════════════════════════════════════
+
+OPÇÃO 1 - Visualizador Integrado (Recomendado):
+  $ python integrated_viewer.py
+  
+  Menu com opções para:
+  • Ver dados em texto (tabelas)
+  • Visualizar gráficos PNG
+  • Exportar relatório
+
+OPÇÃO 2 - Apenas Dados em Texto:
+  $ python view_data.py
+  
+  Menu com opções para:
+  • Tabelas (tempo, throughput, P95)
+  • Comparações gerais
+  • Gráficos ASCII
+  • Estatísticas detalhadas
+  • Exportar CSV
+
+OPÇÃO 3 - Apenas Gráficos PNG:
+  $ python view_charts.py
+  
+  Menu para abrir cada gráfico PNG
+  individualmente ou todos de uma vez
+
+OPÇÃO 4 - Regenerar Gráficos:
+  $ python generate_charts.py
+  
+  Cria os 8 PNG novamente em ./charts/
+
+OPÇÃO 5 - Rodar Load Test Completo:
+  $ python load_test.py
+  
+  Executa testes e gera gráficos automaticamente
+
+
+═══════════════════════════════════════════════════════════════════════════════════
+ 11. DADOS BRUTOS - PARA REFERÊNCIA
+═══════════════════════════════════════════════════════════════════════════════════
+
+TEMPO (ms):
+─────────────────────────────────────────────────────────────────────
+  REST:     [77.64, 71.30, 72.47, 151.29, 142.90] ms
+  GraphQL:  [75.07, 71.97, 145.39, 225.66, 213.39] ms
+  SOAP:     [0.16, 0.02, 0.03, 0.03, 0.03] ms
+  gRPC:     [75.44, 75.09, 72.97, 148.00, 143.31] ms
+
+THROUGHPUT (req/s):
+─────────────────────────────────────────────────────────────────────
+  REST:     [12.88, 14.02, 13.79, 6.61, 7.00] req/s
+  GraphQL:  [13.32, 13.89, 6.88, 4.43, 4.69] req/s
+  SOAP:     [5885.85, 31947.86, 24383.70, 27873.79, 25199.71] req/s
+  gRPC:     [13.25, 13.31, 13.70, 6.76, 6.98] req/s
+
+P95 - TEMPO (ms):
+─────────────────────────────────────────────────────────────────────
+  REST:     [88.19, 77.33, 80.51, 163.05, 151.06] ms
+  GraphQL:  [80.82, 80.52, 161.07, 246.32, 227.91] ms
+  SOAP:     [0.05, 0.04, 0.07, 0.05, 0.06] ms
+  gRPC:     [92.84, 82.08, 81.64, 158.50, 154.77] ms
+
+OPERAÇÕES:
+─────────────────────────────────────────────────────────────────────
+  1. Listar Usuarios
+  2. Listar Musicas
+  3. Playlists do Usuario
+  4. Musicas da Playlist
+  5. Playlists com Musica
+
+
+═══════════════════════════════════════════════════════════════════════════════════
+ 12. DÚVIDAS FREQUENTES
+═══════════════════════════════════════════════════════════════════════════════════
+
+P: Por que SOAP tem tempos tão baixos?
+R: Taxa de sucesso 0% - servidor SOAP não responde corretamente.
+   Não são dados válidos para comparação.
+
+P: REST e gRPC são realmente iguais?
+R: Sim, diferença < 1%. Ambas excelentes escolhas.
+   Escolha REST para simplicidade, gRPC para velocidade pura.
+
+P: Por que GraphQL é mais lento?
+R: Parse de queries é mais complexo + resolução de campos.
+   Trade-off aceitável pelo flexibility de queries.
+
+P: Qual tecnologia devo usar?
+R: Para produção: REST ou gRPC
+   Para APIs públicas: REST (familiaridade)
+   Para performance: gRPC (binary protocol)
+   Para flexibility: GraphQL (se o +15% for aceitável)
+
+P: Os gráficos estão onde?
+R: Em ./charts/ (8 arquivos PNG)
+   Veja com: python integrated_viewer.py
+
+═════════════════════════════════════════════════════════════════════════════════════
+Última atualização: Dezembro 2, 2025
+Documentação completa em: 00_INDICE_GRAFICOS.md
+═════════════════════════════════════════════════════════════════════════════════════

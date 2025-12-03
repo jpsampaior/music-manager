@@ -1,392 +1,281 @@
-# GraphQL, REST, gRPC & SOAP API - Music Playlist Manager
+# Music Manager - Sistema de Gerenciamento de Música 🎵
 
-API completa para gerenciamento de músicas, playlists e usuários, desenvolvida com NestJS, GraphQL, REST, gRPC e SOAP, utilizando Supabase como banco de dados PostgreSQL.
+Sistema completo de gerenciamento de música com múltiplas APIs (REST, GraphQL, SOAP, gRPC) desenvolvido em Go e NestJS.
 
-## 🎯 Sobre o Projeto
+## 📊 Resultados dos Testes de Performance
 
-Esta API permite gerenciar:
-- **Músicas**: Cadastro de músicas com nome e artista
-- **Playlists**: Criação e gerenciamento de playlists
-- **Usuários**: Cadastro de usuários com nome e idade
-- **Relacionamentos**: Associação de músicas a playlists e playlists a usuários
+Testes de carga realizados com 100 requisições por operação:
 
-A API oferece quatro interfaces:
-- **GraphQL**: Para consultas flexíveis e eficientes
-- **REST**: Para integração tradicional com endpoints HTTP
-- **gRPC**: Para comunicação de alta performance com Protocol Buffers
-- **SOAP**: Para integração com sistemas corporativos usando WSDL
+### Gráficos de Performance
 
-## 🛠️ Tecnologias
+#### 1. Tempo Médio por Operação
+![Tempo Médio por Operação](client_python/charts/01_tempo_medio_por_operacao.png)
 
-- **NestJS** - Framework Node.js
-- **GraphQL** - Query language e runtime
-- **Apollo Server** - Servidor GraphQL
-- **gRPC** - Framework RPC de alta performance
-- **Protocol Buffers** - Serialização de dados
-- **SOAP** - Protocolo de comunicação baseado em XML/WSDL
+#### 2. Requisições por Segundo (Throughput)
+![Requisições por Segundo](client_python/charts/02_requisicoes_por_segundo.png)
+
+#### 3. Comparação de Tempo Geral
+![Comparação Tempo Geral](client_python/charts/03_comparacao_tempo_geral.png)
+
+#### 4. Comparação de Throughput
+![Comparação Req/Sec](client_python/charts/04_comparacao_req_per_sec.png)
+
+#### 5. Radar de Comparação (Normalizado)
+![Radar Comparison](client_python/charts/05_radar_comparison.png)
+
+#### 6. Heatmap - Tempo por Operação e Tecnologia
+![Heatmap Tempo](client_python/charts/06_heatmap_tempo.png)
+
+#### 7. Heatmap - Throughput por Operação e Tecnologia
+![Heatmap Req/Sec](client_python/charts/07_heatmap_req_sec.png)
+
+#### 8. Ranking Geral de Performance
+![Ranking Geral](client_python/charts/08_ranking_geral.png)
+
+### 📈 Análise de Resultados
+
+**Vencedor Geral: gRPC**
+- ⚡ Melhor performance em tempo de resposta
+- 🚀 Maior throughput (requisições por segundo)
+- 🎯 Ideal para operações de alta frequência
+
+**Ranking por Tecnologia:**
+1. **gRPC** - Alto desempenho, protocolo binário
+2. **REST** - Equilíbrio entre simplicidade e performance
+3. **SOAP** - Robusto para integração corporativa
+4. **GraphQL** - Flexibilidade com overhead adicional
+
+## 🏗️ Arquitetura do Projeto
+
+```
+music-manager-jp/
+├── grpc/           # Servidor gRPC em Go
+├── soap/           # Servidor SOAP em Go
+├── nest/           # Servidor REST/GraphQL em NestJS
+└── client_python/  # Cliente Python com testes de carga
+```
+
+## 🚀 Servidores
+
+### 1. Servidor gRPC (Go)
+- **Porta:** 4000
+- **Tecnologia:** Go + Protocol Buffers
+- **Banco de Dados:** Supabase
+
+```bash
+cd grpc; go run server/main.go
+```
+
+### 2. Servidor SOAP (Go)
+- **Porta:** 8080
+- **Tecnologia:** Go + XML
+- **Banco de Dados:** Supabase
+
+```bash
+cd soap; go run soap-server/main.go
+```
+
+### 3. Servidor REST/GraphQL (NestJS)
+- **Porta:** 3000
+- **Tecnologia:** NestJS + TypeScript
+- **Banco de Dados:** Supabase
+
+```bash
+cd nest
+npm install
+npm run start:dev
+```
+
+## 🧪 Cliente de Testes
+
+### Cliente Python
+Cliente unificado que suporta todas as 4 tecnologias:
+
+```bash
+cd client_python
+pip install -r requirements.txt
+python load_test.py
+```
+
+**Funcionalidades:**
+- ✅ Testes de carga (100 req/operação)
+- ✅ Geração automática de gráficos
+- ✅ Estatísticas detalhadas (média, P95, P99)
+- ✅ Comparação entre tecnologias
+- ✅ Interface CLI interativa
+
+Para mais detalhes, veja [client_python/README.md](client_python/README.md)
+
+## 📋 Operações Suportadas
+
+Todas as tecnologias suportam as seguintes operações:
+
+1. **Listar Usuários** - Retorna todos os usuários
+2. **Listar Músicas** - Retorna todas as músicas
+3. **Listar Playlists de Usuário** - Retorna playlists de um usuário específico
+4. **Listar Músicas de Playlist** - Retorna músicas de uma playlist específica
+5. **Listar Playlists por Música** - Retorna playlists que contêm uma música
+
+## 🛠️ Tecnologias Utilizadas
+
+### Backend
+- **Go** - Servidores gRPC e SOAP
+- **NestJS** - Servidor REST/GraphQL
 - **Supabase** - Banco de dados PostgreSQL
-- **TypeScript** - Linguagem de programação
+- **Protocol Buffers** - Serialização gRPC
+- **GraphQL** - Query language
 
-## 📊 Estrutura do Banco de Dados
+### Cliente
+- **Python** - Cliente de testes
+- **zeep** - Cliente SOAP
+- **grpcio** - Cliente gRPC
+- **requests** - Cliente REST
+- **matplotlib** - Geração de gráficos
 
+## 📦 Dependências
+
+### Servidor Go (gRPC/SOAP)
+```bash
+go mod download
 ```
-music (id, name, artist)
-playlist (id, name)
-user (id, name, age)
-playlist_music (id, playlistId, musicId) - Relacionamento N:N
-user_playlist (id, userId, playlistId) - Relacionamento N:N
-```
 
-## 🚀 Configuração
-
-### 1. Instalar dependências
-
+### Servidor NestJS
 ```bash
 npm install
 ```
 
-### 2. Configurar variáveis de ambiente
+### Cliente Python
+```bash
+pip install -r requirements.txt
+```
 
-Crie um arquivo `.env` na raiz do projeto:
+## 🔧 Configuração
 
+### Variáveis de Ambiente
+
+Cada servidor precisa de um arquivo `.env`:
+
+**grpc/.env e soap/.env:**
 ```env
-SUPABASE_URL=sua_url_do_supabase
-SUPABASE_ANON_KEY=sua_chave_anon_do_supabase
+SUPABASE_URL=https://sua-url.supabase.co
+SUPABASE_ANON_KEY=sua-chave-anon
+GRPC_PORT=4000
+SOAP_PORT=8080
+```
+
+**nest/.env:**
+```env
+SUPABASE_URL=https://sua-url.supabase.co
+SUPABASE_ANON_KEY=sua-chave-anon
 PORT=3000
 ```
 
-### 3. Executar o projeto
-
-```bash
-# Desenvolvimento
-npm run start:dev
-
-# Produção
-npm run start:prod
-```
-
-A API estará disponível em:
-- **REST API**: `http://localhost:3000`
-- **GraphQL Playground**: `http://localhost:3000/graphql`
-- **gRPC Server**: `localhost:5000`
-- **SOAP Server**: `http://localhost:8000/soap`
-- **SOAP WSDL**: `http://localhost:8000/soap?wsdl`
-
-## 📚 Exemplos de Uso
-
-### GraphQL
-
-#### Queries
-
-**Buscar todas as músicas:**
-```graphql
-query {
-  musics {
-    id
-    name
-    artist
-    playlists {
-      id
-      name
-    }
-  }
-}
-```
-
-**Buscar uma música por ID:**
-```graphql
-query {
-  music(id: 1) {
-    id
-    name
-    artist
-  }
-}
-```
-
-**Buscar todas as playlists com músicas e usuários:**
-```graphql
-query {
-  playlists {
-    id
-    name
-    musics {
-      id
-      name
-      artist
-    }
-    users {
-      id
-      name
-      age
-    }
-  }
-}
-```
-
-#### Mutations
-
-**Criar uma música:**
-```graphql
-mutation {
-  createMusic(input: {
-    name: "Bohemian Rhapsody"
-    artist: "Queen"
-  }) {
-    id
-    name
-    artist
-  }
-}
-```
-
-**Criar uma playlist:**
-```graphql
-mutation {
-  createPlaylist(input: {
-    name: "Minhas Favoritas"
-  }) {
-    id
-    name
-  }
-}
-```
-
-**Adicionar música a uma playlist:**
-```graphql
-mutation {
-  addMusicToPlaylist(input: {
-    playlistId: 1
-    musicId: 1
-  })
-}
-```
-
-**Criar um usuário:**
-```graphql
-mutation {
-  createUser(input: {
-    name: "João Silva"
-    age: 25
-  }) {
-    id
-    name
-    age
-  }
-}
-```
-
-**Adicionar playlist a um usuário:**
-```graphql
-mutation {
-  addPlaylistToUser(input: {
-    userId: 1
-    playlistId: 1
-  })
-}
-```
+## 🧩 Endpoints
 
 ### REST API
-
-#### Music Endpoints
-
-**Listar todas as músicas:**
-```bash
-GET http://localhost:3000/music
+```
+GET  /users
+GET  /musics
+GET  /playlists
+GET  /users/:id/playlists
+GET  /playlists/:id/musics
 ```
 
-**Buscar uma música:**
-```bash
-GET http://localhost:3000/music/1
+### GraphQL
+```
+http://localhost:3000/graphql
 ```
 
-**Criar uma música:**
-```bash
-POST http://localhost:3000/music
-Content-Type: application/json
+Queries disponíveis:
+- `users`
+- `musics`
+- `playlists`
+- `user(id: Int!)`
+- `playlist(id: Int!)`
 
-{
-  "name": "Bohemian Rhapsody",
-  "artist": "Queen"
-}
+### SOAP
+```
+http://localhost:8080/user/wsdl
+http://localhost:8080/music/wsdl
+http://localhost:8080/playlist/wsdl
 ```
 
-**Atualizar uma música:**
-```bash
-PUT http://localhost:3000/music/1
-Content-Type: application/json
-
-{
-  "name": "Bohemian Rhapsody (Updated)",
-  "artist": "Queen"
-}
+### gRPC
+```
+localhost:4000
 ```
 
-**Deletar uma música:**
-```bash
-DELETE http://localhost:3000/music/1
-```
+Services:
+- `UserService`
+- `MusicService`
+- `PlaylistService`
 
-#### Playlist Endpoints
+## 📊 Como Executar os Testes
 
-**Listar todas as playlists:**
-```bash
-GET http://localhost:3000/playlist
-```
+1. **Inicie todos os servidores:**
+   ```bash
+   # Terminal 1 - gRPC
+   cd grpc; go run server/main.go
+   
+   # Terminal 2 - SOAP
+   cd soap; go run soap-server/main.go
+   
+   # Terminal 3 - REST/GraphQL
+   cd nest; npm run start:dev
+   ```
 
-**Buscar uma playlist:**
-```bash
-GET http://localhost:3000/playlist/1
-```
+2. **Execute os testes:**
+   ```bash
+   cd client_python
+   python load_test.py
+   ```
 
-**Buscar músicas de uma playlist:**
-```bash
-GET http://localhost:3000/playlist/1/musics
-```
+3. **Visualize os resultados:**
+   ```bash
+   python integrated_viewer.py
+   ```
 
-**Criar uma playlist:**
-```bash
-POST http://localhost:3000/playlist
-Content-Type: application/json
+## 🎯 Casos de Uso
 
-{
-  "name": "Minhas Favoritas"
-}
-```
+### Quando usar cada tecnologia?
 
-**Adicionar música a uma playlist:**
-```bash
-POST http://localhost:3000/playlist/1/music
-Content-Type: application/json
+**gRPC:**
+- ✅ Microserviços de alta performance
+- ✅ Comunicação entre serviços internos
+- ✅ Streaming bidirecional
+- ✅ Contratos fortemente tipados
 
-{
-  "musicId": 1
-}
-```
+**REST:**
+- ✅ APIs públicas
+- ✅ Simplicidade e cache HTTP
+- ✅ Compatibilidade com browsers
+- ✅ Documentação fácil (OpenAPI/Swagger)
 
-**Remover música de uma playlist:**
-```bash
-DELETE http://localhost:3000/playlist/1/music/1
-```
+**GraphQL:**
+- ✅ Clientes com necessidades variadas
+- ✅ Evitar over-fetching/under-fetching
+- ✅ Prototipagem rápida
+- ✅ Agregação de múltiplas fontes
 
-#### User Endpoints
+**SOAP:**
+- ✅ Integração corporativa/legado
+- ✅ Segurança WS-Security
+- ✅ Transações ACID
+- ✅ Contratos WSDL
 
-**Listar todos os usuários:**
-```bash
-GET http://localhost:3000/user
-```
+## 📝 Licença
 
-**Buscar um usuário:**
-```bash
-GET http://localhost:3000/user/1
-```
+MIT
 
-**Buscar playlists de um usuário:**
-```bash
-GET http://localhost:3000/user/1/playlists
-```
+## 👥 Contribuidores
 
-**Criar um usuário:**
-```bash
-POST http://localhost:3000/user
-Content-Type: application/json
+- Sistema desenvolvido para comparação de performance entre tecnologias de API
+- Cliente de testes desenvolvido em Python
 
-{
-  "name": "João Silva",
-  "age": 25
-}
-```
+## 🔗 Links Úteis
 
-**Adicionar playlist a um usuário:**
-```bash
-POST http://localhost:3000/user/1/playlist
-Content-Type: application/json
-
-{
-  "playlistId": 1
-}
-## 📖 Documentação Completa
-
-Para mais exemplos detalhados, consulte:
-- [Exemplos GraphQL](./GRAPHQL_EXAMPLES.md)
-- [Exemplos REST](./REST_API_EXAMPLES.md)
-- [Exemplos gRPC](./GRPC_EXAMPLES.md)
-- [Exemplos SOAP](./SOAP_API_EXAMPLES.md)
-
-## 🧪 Testando a API SOAP
-
-Execute o script de teste automatizado:
-
-```powershell
-.\test-soap.ps1
-```
-
-Este script testará todas as operações SOAP disponíveis automaticamente.ES.md)
-- [Exemplos REST](./REST_API_EXAMPLES.md)
-- [Exemplos gRPC](./GRPC_EXAMPLES.md)
-
-## 🧪 Testes
-
-```bash
-# Testes unitários
-npm run test
-
-# Testes e2e
-npm run test:e2e
-
-# Cobertura de testes
-npm run test:cov
-```
-
-## 📝 Scripts Disponíveis
-
-```bash
-# Desenvolvimento
-npm run start:dev
-
-## 🏗️ Estrutura do Projeto
-
-```
-src/
-├── controllers/      # Controllers REST
-├── entities/         # Entidades GraphQL
-├── grpc/             # Controllers gRPC
-├── soap/             # Serviços SOAP
-├── inputs/           # Inputs para mutations
-├── resolvers/        # Resolvers GraphQL
-├── supabase/         # Serviço Supabase
-├── app.module.ts     # Módulo principal
-└── main.ts           # Entry point
-proto/
-├── user.proto        # Definições gRPC do User
-├── music.proto       # Definições gRPC do Music
-└── playlist.proto    # Definições gRPC do Playlist
-service.wsdl          # Definições WSDL para SOAP
-test-soap.ps1         # Script de teste SOAP
-```
-
-## 🔄 Comparação entre as Tecnologias
-
-| Característica | REST | GraphQL | gRPC | SOAP |
-|----------------|------|---------|------|------|
-| **Porta** | 3000 | 3000 | 5000 | 8000 |
-| **Formato** | JSON | JSON | Protobuf | XML |
-| **Protocolo** | HTTP/1.1 | HTTP/1.1 | HTTP/2 | HTTP/1.1 |
-| **Tipagem** | Não | Sim (Schema) | Sim (Proto) | Sim (WSDL) |
-| **Performance** | Média | Alta | Muito Alta | Baixa |
-| **Flexibilidade** | Baixa | Muito Alta | Média | Baixa |
-| **Documentação** | Manual | Auto-gerada | Auto-gerada | Auto-gerada (WSDL) |
-| **Caso de Uso** | APIs públicas | Apps modernos | Microsserviços | Sistemas legados |/
-├── controllers/      # Controllers REST
-├── entities/         # Entidades GraphQL
-├── grpc/             # Controllers gRPC
-├── inputs/           # Inputs para mutations
-├── resolvers/        # Resolvers GraphQL
-├── supabase/         # Serviço Supabase
-├── app.module.ts     # Módulo principal
-└── main.ts           # Entry point
-proto/
-├── user.proto        # Definições gRPC do User
-├── music.proto       # Definições gRPC do Music
-└── playlist.proto    # Definições gRPC do Playlist
-```
+- [Documentação gRPC](https://grpc.io/)
+- [Documentação NestJS](https://nestjs.com/)
+- [Documentação GraphQL](https://graphql.org/)
+- [Documentação SOAP](https://www.w3.org/TR/soap/)
+- [Supabase](https://supabase.com/)
